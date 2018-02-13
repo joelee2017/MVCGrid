@@ -11,6 +11,8 @@
     <link href="~/Scripts/jtable/themes/lightcolor/orange/jtable.css" rel="stylesheet" />
 }
 
+產品種類：@Html.DropDownList("CategoryName", ViewBag.CategoryName as SelectList, "--所有記錄--", new {@class="ui-selectable form-control" } )
+<br />
 <div id="CategorlesTableContainer"></div>
 
 @section scripts
@@ -55,9 +57,14 @@
                     },
                 },
             });
-            $("#CategorlesTableContainer").jtable("load");
+            //$("#CategorlesTableContainer").jtable("load");
+            $("#CategoryName").change(function () {
+                $("#CategorlesTableContainer").jtable("load", {
+                    CategoryName: CategoryName.value,
+                });
+            });
+            $("#CategoryName").change();
         });
-
     </script>
 }
 

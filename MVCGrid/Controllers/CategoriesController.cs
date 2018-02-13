@@ -18,22 +18,32 @@ namespace MVCGrid.Controllers
         // GET: Categories
         public ActionResult Index()
         {
+            ViewBag.CategorName = new SelectList(db.Categories.Select(c => c.CategoryName));
             return View();
         }
 
         [HttpPost]
-        public JsonResult List(int jtStartIndex =0, int jtPageSiez=5, string jtSorting =null)
+        public JsonResult List(string CategoryName="", int jtStartIndex =0, int jtPageSiez=5, string jtSorting =null)
         {
             string[] OrderByCondition = jtSorting.Split(new char[]{' '});//{ ' ' }切開空字元
 
             string Ordering = string.Format(
                   "{0} {1}", OrderByCondition[0], OrderByCondition[1].Equals("ASC") ? "Ascending" : "Descending");
+            //==========================================
+            IQueryable query = db.Categories;
+            if(CategoryName != "")
+            {
+                query = db.Categories.Where(c => c.CategoryName == CategoryName);
+            }
 
-            IQueryable ResultRecord = db.Categories.OrderBy(Ordering).
+            //==========================================
+            //IQueryable ResultRecord = db.Categories.OrderBy(Ordering).
+            IQueryable ResultRecord = query.OrderBy(Ordering).
                                             Skip(jtStartIndex).Take(jtPageSiez).AsQueryable();
 
             var result = Json(new { Result = "OK", Records = ResultRecord,
-                                                                TotalRecordCount = db.Categories.Count() });
+                                                                //TotalRecordCount = db.Categories.Count() });
+                                                                TotalRecordCount = query.Count() });
 
             result.MaxJsonLength = int.MaxValue;
 
