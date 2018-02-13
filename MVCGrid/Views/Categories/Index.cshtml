@@ -37,7 +37,7 @@
                     CategoryID: {
                         key: true,
                         create: false,
-                        edit: true,
+                        edit: false,
                         list: true,
                         title: "產品編號",
                         width:"25%"
@@ -53,8 +53,8 @@
                         width:"50%"
                     },
                 },
-
             });
+            $("CategorlesTableContainer").jtable("load");
         });
 
     </script>

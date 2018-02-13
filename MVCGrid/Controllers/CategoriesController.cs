@@ -24,7 +24,7 @@ namespace MVCGrid.Controllers
         [HttpPost]
         public JsonResult List(int jtStartIndex =0, int jtPageSiez=5, string jtSorting =null)
         {
-            string[] OrderByCondition = jtSorting.Split(new char[] { ' ' });//{ ' ' }切開空字元
+            string[] OrderByCondition = jtSorting.Split(new char[]{' '});//{ ' ' }切開空字元
 
             string Ordering = string.Format(
                   "{0} {1}", OrderByCondition[0], OrderByCondition[1].Equals("ASC") ? "Ascending" : "Descending");
