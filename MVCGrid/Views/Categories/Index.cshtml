@@ -5,3 +5,58 @@
 
 <h2>Index</h2>
 
+@section styles
+{
+    <link href="~/Theme/redmond/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+    <link href="~/Scripts/jtable/themes/lightcolor/orange/jtable.css" rel="stylesheet" />
+}
+
+<div id="CategorlesTableContainer"></div>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jtable/jquery.jtable.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#CategorlesTableContainer").jtable({
+                title: "產品種類清單",
+                paging: true,
+                pageSize: 5,
+                sorting: true,
+                defaultSorting:"CategoryID ASC",
+                actions: {
+                    listAction: "@Url.Action("List", "Categories")",
+                    createAction:"@Url.Action("Create", "Categories")",
+                    updateAction: "@Url.Action("Update", "Categories")",
+                    deleteAction:"@Url.Action("Delete", "Categories")"                
+                },
+
+                fields: {
+                    CategoryID: {
+                        key: true,
+                        create: false,
+                        edit: true,
+                        list: true,
+                        title: "產品編號",
+                        width:"25%"
+                    },
+
+                    CategoryName: {
+                        title: "產品種類",
+                        width:"25%"
+                    },
+
+                    Description: {
+                        title: "詳細說明",
+                        width:"50%"
+                    },
+                },
+
+            });
+        });
+
+    </script>
+}
+
