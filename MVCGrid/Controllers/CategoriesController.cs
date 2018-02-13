@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVCGrid.Models;
+using System.Linq.Dynamic;
 
 namespace MVCGrid.Controllers
 {
@@ -17,23 +18,28 @@ namespace MVCGrid.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            return View();
         }
 
-        // GET: Categories/Details/5
-        public ActionResult Details(int? id)
+        [HttpPost]
+        public JsonResult List(int jtStartIndex =0, int jtPageSiez=5, string jtSorting =null)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Categories categories = db.Categories.Find(id);
-            if (categories == null)
-            {
-                return HttpNotFound();
-            }
-            return View(categories);
+            string[] OrderByCondition = jtSorting.Split(new char[] { ' ' });//{ ' ' }切開空字元
+
+            string Ordering = string.Format(
+                  "{0} {1}", OrderByCondition[0], OrderByCondition[1].Equals("ASC") ? "Ascending" : "Descending");
+
+            IQueryable ResultRecord = db.Categories.OrderBy(Ordering).
+                                            Skip(jtStartIndex).Take(jtPageSiez).AsQueryable();
+
+            var result = Json(new { Result = "OK", Records = ResultRecord,
+                                                                TotalRecordCount = db.Categories.Count() });
+
+            result.MaxJsonLength = int.MaxValue;
+
+            return result;
         }
+    
 
         // GET: Categories/Create
         public ActionResult Create()
