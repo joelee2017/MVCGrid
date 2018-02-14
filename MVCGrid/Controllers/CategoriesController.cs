@@ -18,7 +18,7 @@ namespace MVCGrid.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            ViewBag.CategorName = new SelectList(db.Categories.Select(c => c.CategoryName));
+            ViewBag.CategoryName = new SelectList(db.Categories.Select(c => c.CategoryName));
             return View();
         }
 
@@ -140,6 +140,25 @@ namespace MVCGrid.Controllers
             db.Categories.Remove(categories);
             db.SaveChanges();
             return Json(new { Result = "OK", Record = categories });
+        }
+
+        [HttpPost]
+        public JsonResult GetCategories(int id)
+        {
+            var Categories = from c in db.Categories
+                             where c.CategoryID == id
+                             select new
+                             {
+                                 CategoryID = c.CategoryID,
+                                 CategoryName = c.CategoryName,
+                             };
+            return Json(new { Result = "OK", Records = Categories });
+        }
+
+        public FileResult GetPicture(int id)
+        {
+            byte[] content = db.Categories.Find(id).Picture;
+            return File(content, "image/jpeg");
         }
 
         protected override void Dispose(bool disposing)
